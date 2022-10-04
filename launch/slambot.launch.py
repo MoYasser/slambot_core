@@ -50,8 +50,8 @@ def generate_launch_description():
         launch_arguments={}.items()
         )
 
-        ld = LaunchDescription()
-        ld.add_action(rplidar_launchDescription)
-        ld.add_action(slambotaux_launchDescription)
+ld = LaunchDescription()
+ld.add_action(rplidar_launchDescription)
+ld.add_action(slambotaux_launchDescription)
 
-        return ld
+return ld
