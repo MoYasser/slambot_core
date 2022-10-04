@@ -18,16 +18,16 @@ def generate_launch_description():
     declare_slam_params_file_cmd = DeclareLaunchArgument(
         'slam_params_file',
         default_value=os.path.join(get_package_share_directory("slam_toolbox"),
-                                   'config', 'mapper_params_online_sync.yaml'),
+                                   'config', 'mapper_params_online_async.yaml'),
         description='Full path to the ROS2 parameters file to use for the slam_toolbox node')
 
-    start_sync_slam_toolbox_node = Node(
+    start_async_slam_toolbox_node = Node(
         parameters=[
           slam_params_file,
           {'use_sim_time': use_sim_time}
         ],
         package='slam_toolbox',
-        executable='sync_slam_toolbox_node',
+        executable='async_slam_toolbox_node',
         name='slam_toolbox',
         output='screen')
 
@@ -35,6 +35,6 @@ def generate_launch_description():
 
     ld.add_action(declare_use_sim_time_argument)
     ld.add_action(declare_slam_params_file_cmd)
-    ld.add_action(start_sync_slam_toolbox_node)
+    ld.add_action(start_async_slam_toolbox_node)
 
     return ld
