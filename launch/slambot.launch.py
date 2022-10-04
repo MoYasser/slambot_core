@@ -41,13 +41,13 @@ def generate_launch_description():
                 output='screen',
         )
 
-        slambotaux_launchDescription = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                os.path.join(
-                    get_package_share_directory('slambot_core'),
-                    'launch',
-                    'slambotaux.launch.py')),
-            launch_arguments={}.items()
+    slambotaux_launchDescription = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(
+                get_package_share_directory('slambot_core'),
+                'launch',
+                'slambotaux.launch.py')),
+        launch_arguments={}.items()
         )
 
         ld = LaunchDescription()
