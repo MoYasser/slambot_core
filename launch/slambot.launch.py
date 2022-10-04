@@ -7,6 +7,7 @@ from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 from launch.actions import DeclareLaunchArgument
 from ament_index_python.packages import get_package_share_directory
+from launch.actions import LogInfo
 
 def generate_launch_description():
     serial_port = LaunchConfiguration('serial_port', default='/dev/ttyUSB0')
@@ -30,20 +31,42 @@ def generate_launch_description():
     # This launch action (node) was copied from rplidar.launch.py
     rplidar_launchDescription = ([
 
+        DeclareLaunchArgument(
+            'serial_port',
+            default_value=serial_port,
+            description='Specifying usb port to connected lidar'),
+
+        DeclareLaunchArgument(
+            'serial_baudrate',
+            default_value=serial_baudrate,
+            description='Specifying usb port baudrate to connected lidar'),
+        
+        DeclareLaunchArgument(
+            'frame_id',
+            default_value=frame_id,
+            description='Specifying frame_id of lidar'),
+
+        DeclareLaunchArgument(
+            'inverted',
+            default_value=inverted,
+            description='Specifying whether or not to invert scan data'),
+
+        DeclareLaunchArgument(
+            'angle_compensate',
+            default_value=angle_compensate,
+            description='Specifying whether or not to enable angle_compensate of scan data'),
+
+
         Node(
-            node_name='rplidar_composition',
-            package='rplidar_ros',
-            node_executable='rplidar_composition',
-            output='screen',
-            parameters=[{
-                'serial_port': '/dev/ttyUSB0',
-                'serial_baudrate': 115200,  # A1 / A2
-                # 'serial_baudrate': 256000, # A3
-                'frame_id': 'laser',
-                'inverted': False,
-                'angle_compensate': True,
-            }],
-        ),
+            package='rplidar_ros2',
+            executable='rplidar_scan_publisher',
+            name='rplidar_scan_publisher',
+            parameters=[{'serial_port': serial_port, 
+                         'serial_baudrate': serial_baudrate, 
+                         'frame_id': frame_id,
+                         'inverted': inverted, 
+                         'angle_compensate': angle_compensate}],
+            output='screen'),
     ])
 
     slambotaux_launchDescription = IncludeLaunchDescription(
