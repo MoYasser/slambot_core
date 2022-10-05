@@ -8,7 +8,26 @@ from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
-    use_sim_time = LaunchConfiguration('use_sim_time')
+    use_sim_time = LaunchConfiguration('use_sim_time', default='false')
+    
+    urdf_file = os.path.join(
+        get_package_share_directory('slambot_core'),
+        'urdf',
+        'head_2d.urdf')
+    with open(urdf_file, 'r') as infp:
+        urdf = infp.read()
+
+    start_robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        name='robot_state_publisher_node',
+        output='screen',
+        parameters=[{
+            'use_sim_time': use_sim_time,
+            'robot_description': urdf
+        }]
+    )
+    
     slam_params_file = LaunchConfiguration('slam_params_file')
 
     declare_use_sim_time_argument = DeclareLaunchArgument(
