@@ -4,6 +4,13 @@ from launch import LaunchDescription
 from launch_ros.actions import Node
 from ament_index_python.packages import get_package_share_directory
 
+ARGUMENTS = [
+    DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use simulation (Gazebo) clock if true')
+]
+
 def generate_launch_description():
 
     rviz_display = os.path.join(
@@ -14,8 +21,11 @@ def generate_launch_description():
     rviz2_node = Node(
         package='rviz2',
         executable='rviz2',
-        name='slambot_core_rviz2_node',
-        output='screen',
-        arguments=['-d', rviz_display])
+        name='rviz2',
+        arguments=['-d', rviz_display],
+        parameters=[{'use_sim_time': LaunchConfiguration('use_sim_time')}],
+        output='screen')
 
-    return LaunchDescription([rviz2_node])
+    ld = LaunchDescription(ARGUMENTS)
+    ld.add_action(rviz2_node)
+    return ld
